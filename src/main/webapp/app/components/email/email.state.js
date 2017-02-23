@@ -8,16 +8,16 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('home', {
+        $stateProvider.state('checkemail', {
             parent: 'app',
-            url: '/home',
+            url: '/',
             data: {
                 authorities: []
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/home/home.html',
-                    controller: 'HomeController',
+                    templateUrl: 'app/components/email/email.html',
+                    controller: 'EmailController',
                     controllerAs: 'vm'
                 }
             }

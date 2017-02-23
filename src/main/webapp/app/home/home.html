@@ -1,10 +1,13 @@
 <div ng-cloak>
     <div class="row">
-        <div class="col-md-4" style="background-color: black">
-            Nom
+        <div class="col-md-4" >
+            Nom : <input type="text" class="form-control"/>
+            Prenom : <input type="text" class="form-control"/>
+            Email : <input type="email" class="form-control"/>
+            {{vm.emailInput}}
         </div>
-        <div class="col-md-8" style="background-color: red">
-            Prenom
+        <div class="col-md-8">
+            <cal></cal>
         </div>
     </div>
 </div>
