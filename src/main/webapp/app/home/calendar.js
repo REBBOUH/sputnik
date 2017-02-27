@@ -30,17 +30,21 @@
                 _buildMonth(scope, start, scope.month);
 
                 scope.select = function(day) {
-
                     scope.selected = day.date;
-                    var i = scope.workingDays.indexOf( scope.selected);
+                    var i = scope.workingDays.indexOf( scope.selected.format('DD/MM/YYYY'));
                     console.log(i);
-                    /*if(i != -1) {
-                        array.splice(i, 1);}*/
-                    scope.workingDays.push(day.date.format('MMMM Do YYYY'));
+                    if(i != -1) {
+                        day.selectedDay = false;
+                        scope.workingDays.splice(i, 1);}
+                    else{
+                        day.selectedDay = true;
+                        scope.workingDays.push(day.date.format('DD/MM/YYYY'));
+                    }
+
                     console.log(scope.workingDays);
                     console.log('Number of Working days = '+scope.workingDays.length);
                    // day.active = false;
-                    day.selactedDay=true;
+
                     //console.log(scope.selected.isSame('2017-02-20'));
                 };
 
@@ -77,16 +81,18 @@
 
         function _buildWeek(date, month) {
             var days = [];
+            var holiday = ["01/01/2017","01/02/2017","25/05/2017","28/02/2017","14/07/2017","15/08/2017","01/11/2017","11/11/2017","25/12/2017"]
 
             for (var i = 0; i < 7; i++) {
                 days.push({
-                    selactedDay:false,
-                    active: (i != 5 && i != 6),
+                    selectedDay: false,
+
                     name: date.format("dd").substring(0, 1),
                     number: date.date(),
                     isCurrentMonth: date.month() === month.month(),
                     isToday: date.isSame(new Date(), "day"),
-                    date: date
+                    date: date,
+                    active: (i != 5 && i != 6 &&(holiday.indexOf(date.format('DD/MM/YYYY'))== -1))
                 });
                 date = date.clone();
                 date.add(1, "d");

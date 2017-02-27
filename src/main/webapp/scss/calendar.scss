@@ -97,6 +97,10 @@ calendar {
                     background-color: #adadad;
                     cursor: not-allowed;
                 }
+                &.selectedDay {
+                    background-color: rgba(5, 173, 16, 0.74);
+                    color: white;
+                }
                 &.selected {
                     background: #2875C7;
                     color: white;

@@ -81,6 +81,9 @@ calendar {
       calendar > div.week > span.day.weekend {
         background-color: #adadad;
         cursor: not-allowed; }
+      calendar > div.week > span.day.selectedDay {
+        background-color: rgba(5, 173, 16, 0.74);
+        color: white; }
       calendar > div.week > span.day.selected {
         background: #2875C7;
         color: white; }

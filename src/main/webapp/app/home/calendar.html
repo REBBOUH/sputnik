@@ -1,7 +1,7 @@
 <div class="header">
-    <i class="fa fa-angle-left" ng-click="previous()"></i>
+    <i class="glyphicon glyphicon-circle-arrow-left" ng-click="previous()"></i>
     <span>{{month.format("MMMM, YYYY")}}</span>
-    <i class="fa fa-angle-right" ng-click="next()"></i>
+    <i class="glyphicon glyphicon-circle-arrow-right fa-angle-right" ng-click="next()"></i>
 </div>
 <div class="week names">
     <span class="day">Mon</span>
@@ -13,5 +13,10 @@
     <span class="day">Sun</span>
 </div>
 <div class="week" ng-repeat="week in weeks">
-    <span class="day" ng-class="{ today: day.isToday, 'different-month': !day.isCurrentMonth, 'weekend': !day.active, selected: day.date.isSame(selected) }" ng-click="day.active && select(day)" ng-repeat="day in week.days">{{day.number}}</span>
+    <span class="day" ng-class="{ today: day.isToday, 'different-month': !day.isCurrentMonth, 'weekend': !day.active, 'selectedDay': day.selectedDay }" ng-click="day.active && select(day)" ng-repeat="day in week.days">{{day.number}}</span>
 </div>
+<div>
+    <span> Working Days = </span>{{workingDays.length}}
+</div>
+
+<!-- , selected: day.date.isSame(selected) -->
