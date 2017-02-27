@@ -61,7 +61,7 @@
         };
 
         function _removeTime(date) {
-            return date.day(0).hour(0).minute(0).second(0).millisecond(0);
+            return date.day(1).hour(0).minute(0).second(0).millisecond(0);
         }
 
         function _buildMonth(scope, start, month) {
@@ -79,8 +79,6 @@
             var days = [];
 
             for (var i = 0; i < 7; i++) {
-                date = date.clone();
-                date.add(1, "d");
                 days.push({
                     selactedDay:false,
                     active: (i != 5 && i != 6),
@@ -90,6 +88,8 @@
                     isToday: date.isSame(new Date(), "day"),
                     date: date
                 });
+                date = date.clone();
+                date.add(1, "d");
             }
             return days;
         }
