@@ -2,14 +2,17 @@
     'use strict';
     angular
         .module('sputnikApp')
-        .controller('calendarDemo',  function($scope) {
-            $scope.day = moment();
-
-        });
+        .controller('calendarDemo',calendarDemo);
+    calendarDemo.$inject = ['$scope', 'shareService'];
+    function calendarDemo ($scope,shareService ) {
+        var vm = this;
+        $scope.day = moment();
+        vm.person = shareService.person;
+        };
 
     angular
         .module('sputnikApp')
-        .directive("calendar", function() {
+        .directive("calendar",['shareService', function(shareService) {
         return {
             restrict: "E",
             templateUrl: "app/home/calendar.html",
@@ -17,8 +20,8 @@
                 selected: "=",
             },
             link: function(scope) {
-
-                    scope.workingDays = [];
+                scope.workingDays = [];
+                scope.sharedValues = shareService.sharedValues ;
 
                 scope.selected = _removeTime(scope.selected || moment());
                 scope.month = scope.selected.clone();
@@ -40,7 +43,7 @@
                         day.selectedDay = true;
                         scope.workingDays.push(day.date.format('DD/MM/YYYY'));
                     }
-
+                    shareService.sharedValues.workingDays = scope.workingDays.length;
                     console.log(scope.workingDays);
                     console.log('Number of Working days = '+scope.workingDays.length);
                    // day.active = false;
@@ -61,6 +64,7 @@
                     scope.month.month(scope.month.month()-1);
                     _buildMonth(scope, previous, scope.month);
                 };
+
             }
         };
 
@@ -99,7 +103,7 @@
             }
             return days;
         }
-    });
+    }]);
 })();
 
 

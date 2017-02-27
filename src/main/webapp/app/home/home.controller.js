@@ -5,11 +5,11 @@
         .module('sputnikApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state','shareService'];
 
-    function HomeController ($scope, Principal, LoginService, $state) {
+    function HomeController ($scope, Principal, LoginService, $state, shareService) {
         var vm = this;
-
+        vm.sharedValues = shareService.sharedValues;
         vm.account = null;
         vm.isAuthenticated = null;
         vm.login = LoginService.open;

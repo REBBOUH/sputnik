@@ -16,7 +16,9 @@
     <span class="day" ng-class="{ today: day.isToday, 'different-month': !day.isCurrentMonth, 'weekend': !day.active, 'selectedDay': day.selectedDay }" ng-click="day.active && select(day)" ng-repeat="day in week.days">{{day.number}}</span>
 </div>
 <div>
-    <span> Working Days = </span>{{workingDays.length}}
+
+    <span> Working Days = </span>{{sharedValues.workingDays}}
+
 </div>
 
 <!-- , selected: day.date.isSame(selected) -->
