@@ -14,8 +14,7 @@
             'ui.router',
             'infinite-scroll',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
-            'angular-loading-bar',
-            'ui.calendar'
+            'angular-loading-bar'
         ])
         .run(run);
 
