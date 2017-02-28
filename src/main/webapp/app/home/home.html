@@ -7,8 +7,14 @@
             {{vm.emailInput}}
         </div>
         <div class="col-md-8">
+            <div class="alert-danger notification">
+                <strong>Veuillez selectionner vos jours de congés </strong>
+            </div>
             <calendar selected="day"></calendar>
-            <h4><span class="label label-success">Les jours travaillés</span> <span class="badge">{{vm.sharedValues.workingDays}}</span></h4>
+            <button class="btn btn-default" ng-click="vm.showDetails()">valider</button>
+            <div ng-show="vm.showResult">
+                <h4><span class="label label-success">Les jours travaillés</span> <span class="badge">{{vm.sharedValues.workingDays}}</span></h4>
+            </div>
         </div>
     </div>
 </div>
