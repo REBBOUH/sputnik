@@ -65,6 +65,7 @@
                     var numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length)
                     console.log(' Number of notWorkingDays '+ numOfWorkingDay);
                     shareService.sharedValues.workingDays = numOfWorkingDay;
+                    shareService.sharedValues.notWorkingDays= notWorkingDays;
                     console.log(notWorkingDays);
 
                 };
