@@ -3,13 +3,12 @@
         <div class="col-md-4" >
             Nom : <input type="text" class="form-control"/>
             Prenom : <input type="text" class="form-control"/>
-            Email : <input type="email" class="form-control"/>
+            Email : <input type="email" class="form-control" value="{{vm.sharedValues.email}}" disabled/>
             {{vm.emailInput}}
         </div>
         <div class="col-md-8">
             <calendar selected="day"></calendar>
             <h4><span class="label label-success">Les jours travaillés</span> <span class="badge">{{vm.sharedValues.workingDays}}</span></h4>
-            email{{vm.emailInput}}
         </div>
     </div>
 </div>
