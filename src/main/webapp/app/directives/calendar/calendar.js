@@ -36,24 +36,27 @@
             scope: {
                 selected: "=",
             },
-            link: function(scope) {
+            link: function($scope) {
                 //var test =moment("2017-09-25");
-                 var numWeekends =  _getNumOfDays(now,6)+_getNumOfDays(now,7)
+                 var numWeekends =  _getNumOfDays(now,6)+_getNumOfDays(now,7);
+                var numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length);
                  console.log('number of day'+numOfMonthDays);
                 console.log(' Number of Weekends days '+ numWeekends);
                 console.log(' Number of holydays '+ _getNumHoliday());
 
-                scope.sharedValues = shareService.sharedValues ;
-                scope.selected = _removeTime(scope.selected || moment());
-                scope.month = scope.selected.clone();
-                var start = scope.selected.clone();
+                $scope.sharedValues = shareService.sharedValues ;
+                $scope.sharedValues.workingDays=numOfWorkingDay;
+
+                $scope.selected = _removeTime($scope.selected || moment());
+                $scope.month = $scope.selected.clone();
+                var start = $scope.selected.clone();
                 start.date(1);
                 _removeTime(start.day(0));
-                _buildMonth(scope, start, scope.month);
+                _buildMonth($scope, start, $scope.month);
 
-                scope.select = function(day) {
-                    scope.selected = day.date;
-                    var i = notWorkingDays.indexOf( scope.selected.format('DD/MM/YYYY'));
+                $scope.select = function(day) {
+                    $scope.selected = day.date;
+                    var i = notWorkingDays.indexOf( $scope.selected.format('DD/MM/YYYY'));
                     if(i != -1) {
                         day.selectedDay = false;
                         notWorkingDays.splice(i, 1);}
@@ -62,7 +65,7 @@
                         notWorkingDays.push(day.date.format('DD/MM/YYYY'));
                     }
                     console.log('Number of NonWorking days = '+notWorkingDays.length);
-                    var numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length)
+                    numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length);
                     console.log(' Number of notWorkingDays '+ numOfWorkingDay);
                     shareService.sharedValues.workingDays = numOfWorkingDay;
                     shareService.sharedValues.notWorkingDays= notWorkingDays;
@@ -70,38 +73,39 @@
 
                 };
 
-                scope.next = function() {
-                    var next = scope.month.clone();
+                $scope.next = function() {
+                    var next = $scope.month.clone();
                     _removeTime(next.month(next.month()+1).date(1));
-                    scope.month.month(scope.month.month()+1);
-                    _buildMonth(scope, next, scope.month);
+                    $scope.month.month($scope.month.month()+1);
+                    _buildMonth($scope, next, $scope.month);
                 };
 
-                scope.previous = function() {
-                    var previous = scope.month.clone();
+                $scope.previous = function() {
+                    var previous = $scope.month.clone();
                     _removeTime(previous.month(previous.month()-1).date(1));
-                    scope.month.month(scope.month.month()-1);
-                    _buildMonth(scope, previous, scope.month);
+                    $scope.month.month($scope.month.month()-1);
+                    _buildMonth($scope, previous, $scope.month);
                 };
 
             }
         };
 
-            function _getNumOfDays(date, weekday) {
-                date.date(1);
-                var dif = (7 + (weekday - date.weekday())) % 7 + 1;
-                return Math.floor((date.daysInMonth() - dif) / 7) + 1;
-            }
-            function _getNumHoliday() {
-                var num = 0;
-                for (var i = 0; i < curentYear.length; i++) {
-                    var date = moment(curentYear[i],"DD/MM/YYYY");
-                    if(date.isSame(now, 'month') && date.weekday()!=6 && date.weekday()!=7){
-                        num++;
-                    }
+        function _getNumOfDays(date, weekday) {
+            date.date(1);
+            var dif = (7 + (weekday - date.weekday())) % 7 + 1;
+            return Math.floor((date.daysInMonth() - dif) / 7) + 1;
+        }
+
+        function _getNumHoliday() {
+            var num = 0;
+            for (var i = 0; i < curentYear.length; i++) {
+                var date = moment(curentYear[i],"DD/MM/YYYY");
+                if(date.isSame(now, 'month') && date.weekday()!=6 && date.weekday()!=7){
+                    num++;
                 }
-                return num;
             }
+            return num;
+        }
 
         function _removeTime(date) {
             return date.day(1).hour(0).minute(0).second(0).millisecond(0);
