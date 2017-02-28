@@ -34,7 +34,7 @@ calendar {
       cursor: pointer; }
       calendar > div.header > i.fa-angle-left {
         text-align: left; }
-      calendar > div.header > i.fa-angle-right {
+      calendar > div.header > i.glyphicon-circle-arrow-right {
         text-align: right;
         margin-left: -40px; }
     calendar > div.header > span {
