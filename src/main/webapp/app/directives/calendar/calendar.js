@@ -7,7 +7,7 @@
     function calendarDemo ($scope,shareService ) {
         var vm = this;
         $scope.day = moment();
-        vm.sharedValues = shareService.sharedValues;on;
+        vm.sharedValues = shareService.sharedValues;
         };
 
     angular
@@ -27,7 +27,7 @@
             var curentYear = holiday["2017"];
             var now = new moment();
             var numOfMonthDays = moment(now).daysInMonth();
-
+            var notWorkingDays = [];
 
 
             return {
@@ -38,11 +38,11 @@
             },
             link: function(scope) {
                 //var test =moment("2017-09-25");
-                 var numWeekends =  getNumOfDays(now,6)+getNumOfDays(now,7)
+                 var numWeekends =  _getNumOfDays(now,6)+_getNumOfDays(now,7)
                  console.log('number of day'+numOfMonthDays);
                 console.log(' Number of Weekends days '+ numWeekends);
-                console.log(' Number of holydays '+ getNumHoliday());
-                scope.workingDays = [];
+                console.log(' Number of holydays '+ _getNumHoliday());
+
                 scope.sharedValues = shareService.sharedValues ;
                 scope.selected = _removeTime(scope.selected || moment());
                 scope.month = scope.selected.clone();
@@ -53,19 +53,19 @@
 
                 scope.select = function(day) {
                     scope.selected = day.date;
-                    var i = scope.workingDays.indexOf( scope.selected.format('DD/MM/YYYY'));
+                    var i = notWorkingDays.indexOf( scope.selected.format('DD/MM/YYYY'));
                     if(i != -1) {
                         day.selectedDay = false;
-                        scope.workingDays.splice(i, 1);}
+                        notWorkingDays.splice(i, 1);}
                     else{
                         day.selectedDay = true;
-                        scope.workingDays.push(day.date.format('DD/MM/YYYY'));
+                        notWorkingDays.push(day.date.format('DD/MM/YYYY'));
                     }
-                    console.log('Number of NonWorking days = '+scope.workingDays.length);
-                    var numOfWorkingDay = numOfMonthDays-(numWeekends+getNumHoliday()+scope.workingDays.length)
-                    console.log(' Number of workingDays '+ numOfWorkingDay);
+                    console.log('Number of NonWorking days = '+notWorkingDays.length);
+                    var numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length)
+                    console.log(' Number of notWorkingDays '+ numOfWorkingDay);
                     shareService.sharedValues.workingDays = numOfWorkingDay;
-                    console.log(scope.workingDays);
+                    console.log(notWorkingDays);
 
                 };
 
@@ -85,12 +85,13 @@
 
             }
         };
-            function getNumOfDays(date, weekday) {
+
+            function _getNumOfDays(date, weekday) {
                 date.date(1);
                 var dif = (7 + (weekday - date.weekday())) % 7 + 1;
                 return Math.floor((date.daysInMonth() - dif) / 7) + 1;
             }
-            function getNumHoliday() {
+            function _getNumHoliday() {
                 var num = 0;
                 for (var i = 0; i < curentYear.length; i++) {
                     var date = moment(curentYear[i],"DD/MM/YYYY");
@@ -100,7 +101,6 @@
                 }
                 return num;
             }
-
 
         function _removeTime(date) {
             return date.day(1).hour(0).minute(0).second(0).millisecond(0);
@@ -114,15 +114,15 @@
                 date.add(1, "w");
                 done = count++ > 2 && monthIndex !== date.month();
                 monthIndex = date.month();
+
             }
         }
 
         function _buildWeek(date, month) {
             var days = [];
-
             for (var i = 0; i < 7; i++) {
                 days.push({
-                    selectedDay: false,
+                    selectedDay: (notWorkingDays.indexOf(date.format('DD/MM/YYYY'))!= -1),
                     name: date.format("dd").substring(0, 1),
                     number: date.date(),
                     isCurrentMonth: date.month() === month.month(),
