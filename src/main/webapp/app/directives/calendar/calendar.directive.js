@@ -57,7 +57,7 @@
 
                 $scope.select = function(day) {
                     selected = day.date;
-                    var i = notWorkingDays.indexOf( selected);
+                    var i = notWorkingDays.map(Number).indexOf(+selected);
                     if(i != -1) {
                         day.selectedDay = false;
                         notWorkingDays.splice(i, 1);}
