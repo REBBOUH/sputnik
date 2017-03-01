@@ -26,6 +26,8 @@
                new moment("25/12/2017","DD/MM/YYYY")
             ]};
             var selected = new moment();
+            //var monthName = moment.months(selected.month());
+            //console.log(monthName);
             var notWorkingDays = [];
             var curentYear = holiday["2017"];
             var numOfMonthDays = moment(selected).daysInMonth();
@@ -45,6 +47,8 @@
                 console.log(' Number of holydays '+ _getNumHoliday());
                 $scope.sharedValues = shareService.sharedValues ;
                 $scope.sharedValues.workingDays=numOfWorkingDay;
+                shareService.sharedValues.selectedMonth= selected.format("MMMM");
+
                 $scope.month = selected.clone();
                 var start = selected.clone();
                 start.date(1);
@@ -67,7 +71,6 @@
                     shareService.sharedValues.workingDays = numOfWorkingDay;
                     shareService.sharedValues.notWorkingDays= notWorkingDays;
                     console.log(notWorkingDays);
-
                 };
 
                 $scope.next = function() {
@@ -76,7 +79,8 @@
                     $scope.month.month($scope.month.month()+1);
                     _buildMonth($scope, next, $scope.month);
                     _calWorkingDays($scope.month);
-                    console.log('numOfMonthDays :'+numOfMonthDays+ ' numWeekends :  ' + numWeekends+' numOfWorkingDay : ' +numOfWorkingDay);
+                    console.log('numOfMonthDays :'+numOfMonthDays+ ' numWeekends :  ' + numWeekends+' numOfWorkingDay : '
+                        +numOfWorkingDay +'monthName : '+$scope.month.format("MMMM"));
                 };
 
                 $scope.previous = function() {
@@ -85,7 +89,8 @@
                     $scope.month.month($scope.month.month()-1);
                     _buildMonth($scope, previous, $scope.month);
                     _calWorkingDays($scope.month);
-                    console.log('numOfMonthDays :'+numOfMonthDays+ ' numWeekends :  ' + numWeekends+' numOfWorkingDay : ' +numOfWorkingDay);
+                    console.log('numOfMonthDays :'+numOfMonthDays+ ' numWeekends :  ' + numWeekends+' numOfWorkingDay : '
+                        +numOfWorkingDay +'monthName : '+$scope.month.format("MMMM"));
                 };
             }
         };
@@ -97,6 +102,7 @@
             numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length);
             shareService.sharedValues.workingDays = numOfWorkingDay;
             shareService.sharedValues.notWorkingDays= notWorkingDays;
+            shareService.sharedValues.selectedMonth= selectedDate.format("MMMM");
         }
 
         function _getNumOfDays(date, weekday) {
