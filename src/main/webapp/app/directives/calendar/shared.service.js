@@ -10,7 +10,7 @@
         .factory('shareService', shareService);
 
     function shareService () {
-        var shared = { workingDays: 0, email: '',notWorkingDays:[], selectedMonth : ''};
+        var shared = { workingDays: 0, email: '',notWorkingDays:[], selectedMonth : '', showDetail:false};
         return {
             sharedValues: shared,
         };

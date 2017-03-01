@@ -56,6 +56,7 @@
                 _buildMonth($scope, start, $scope.month);
 
                 $scope.select = function(day) {
+                    shareService.sharedValues.showDetail = false;
                     selected = day.date;
                     var i = notWorkingDays.map(Number).indexOf(+selected);
                     if(i != -1) {

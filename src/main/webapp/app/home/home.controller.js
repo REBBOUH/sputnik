@@ -14,11 +14,10 @@
         vm.isAuthenticated = null;
         vm.login = LoginService.open;
         vm.register = register;
-        vm.showResult = false;
         vm.showDetails =showDetails;
 
         function showDetails() {
-            vm.showResult=true;
+            shareService.sharedValues.showDetail = true;
         }
 
         $scope.$on('authenticationSuccess', function() {
