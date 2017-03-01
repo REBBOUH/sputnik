@@ -14,15 +14,16 @@
         .module('sputnikApp')
         .directive("calendar",['shareService', function(shareService) {
             var holiday = {"2017":[
-                "01/01/2017",
-                "01/02/2017",
-                "04/02/2017",
-                "28/02/2017",
-                "14/07/2017",
-                "15/08/2017",
-                "01/11/2017",
-                "11/11/2017",
-                "25/12/2017"
+               new moment("01/01/2017","DD/MM/YYYY"),
+               new moment("07/04/2017","DD/MM/YYYY"),
+               new moment("01/05/2017","DD/MM/YYYY"),
+               new moment("08/05/2017","DD/MM/YYYY"),
+               new moment("25/05/2017","DD/MM/YYYY"),
+               new moment("01/06/2017","DD/MM/YYYY"),
+               new moment("14/07/2017","DD/MM/YYYY"),
+               new moment("15/08/2017","DD/MM/YYYY"),
+               new moment("01/11/2017","DD/MM/YYYY"),
+               new moment("25/12/2017","DD/MM/YYYY")
             ]};
             var selected = new moment();
             var notWorkingDays = [];
@@ -30,9 +31,6 @@
             var numOfMonthDays = moment(selected).daysInMonth();
             var numWeekends =  _getNumOfDays(selected,6)+_getNumOfDays(selected,7);
             var numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length);
-
-
-
 
             return {
             restrict: "E",
@@ -55,13 +53,13 @@
 
                 $scope.select = function(day) {
                     selected = day.date;
-                    var i = notWorkingDays.indexOf( selected.format('DD/MM/YYYY'));
+                    var i = notWorkingDays.indexOf( selected);
                     if(i != -1) {
                         day.selectedDay = false;
                         notWorkingDays.splice(i, 1);}
                     else{
                         day.selectedDay = true;
-                        notWorkingDays.push(day.date.format('DD/MM/YYYY'));
+                        notWorkingDays.push(day.date);
                     }
                     console.log('Number of NonWorking days = '+notWorkingDays.length);
                     numOfWorkingDay = numOfMonthDays-(numWeekends+_getNumHoliday()+notWorkingDays.length);
@@ -138,13 +136,13 @@
             var days = [];
             for (var i = 0; i < 7; i++) {
                 days.push({
-                    selectedDay: (notWorkingDays.indexOf(date.format('DD/MM/YYYY'))!= -1),
+                    selectedDay: (notWorkingDays.map(Number).indexOf(+date)!= -1),
                     name: date.format("dd").substring(0, 1),
                     number: date.date(),
                     isCurrentMonth: date.month() === month.month(),
                     isToday: date.isSame(new Date(), "day"),
                     date: date,
-                    active: (i != 5 && i != 6 &&(curentYear.indexOf(date.format('DD/MM/YYYY'))== -1))
+                    active: (i != 5 && i != 6 &&(curentYear.map(Number).indexOf(+date)== -1))
                 });
                 date = date.clone();
                 date.add(1, "d");
