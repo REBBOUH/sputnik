@@ -1,5 +1,5 @@
 <div ng-cloak>
-    <div class="row">
+    <div class="row print">
         <div class="col-md-4" >
             Nom : <input type="text" class="form-control"/>
             Prenom : <input type="text" class="form-control"/>
@@ -10,8 +10,9 @@
             <div class="alert-danger notification">
                 <strong>Veuillez selectionner vos jours de d'absences SVP </strong>
             </div>
-            <calendar selected="day"></calendar>
+            <calendar></calendar>
             <button class="btn btn-default btn-validate" ng-click="vm.showDetails()">valider</button>
+            <button class="btn btn-default btn-validate" ng-click="vm.printDocument()">Enregistrer</button>
 
             <div class="panel panel-default" ng-show="vm.sharedValues.showDetail ">
                 <div class="panel-heading"> <h4>Summary of {{vm.sharedValues.selectedMonth}}</h4> </div>

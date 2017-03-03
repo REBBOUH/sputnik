@@ -16,6 +16,14 @@
         vm.register = register;
         vm.showDetails =showDetails;
 
+        vm.printDocument = printDocument;
+        function printDocument(){
+            var pdf = new jsPDF('p', 'pt', 'a4');
+            pdf.addHTML(document.getElementsByClassName("well"), function() {
+                pdf.save('rapport.pdf');
+            });
+        }
+
         function showDetails() {
             shareService.sharedValues.showDetail = true;
         }
