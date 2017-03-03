@@ -1,5 +1,5 @@
 <div ng-cloak>
-    <div class="alert-danger notification">
+    <div class="alert-danger notification col-md-offset-6 col-md-5">
         <strong>Veuillez selectionner vos jours de d'absences SVP </strong>
     </div>
     <div class="row print">
@@ -10,6 +10,7 @@
         </div>
         <div class="col-md-8">
             <calendar></calendar>
+
             <div class="panel panel-default" ng-show="vm.sharedValues.showDetail ">
                 <div class="panel-heading"> <h4>Summary of {{vm.sharedValues.selectedMonth}}</h4> </div>
                 <div class="panel-body">
@@ -23,6 +24,12 @@
                     </h4>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="home-buttons">
+            <button class="btn btn-default btn-validate" ng-click="vm.showDetails()">valider</button>
+            <button class="btn btn-default btn-save" ng-click="vm.printDocument()"ng-disabled="!vm.sharedValues.showDetail">Enregistrer</button>
         </div>
     </div>
 </div>
