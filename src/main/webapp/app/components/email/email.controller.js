@@ -7,11 +7,12 @@
         .module('sputnikApp')
         .controller('EmailController', EmailController);
 
-    EmailController.$inject = ['$scope','Email','$state','shareService'];
+    EmailController.$inject = ['$scope','Email','$state','shareService','$localStorage'];
 
-    function EmailController ($scope, Email,$state, shareService) {
+    function EmailController ($scope, Email,$state, shareService,$localStorage) {
         var vm = this;
         $scope.emailInput = "";
+        $localStorage.email = $scope.emailInput;
 
         vm.sharedValues = shareService.sharedValues;
         vm.invalid = false;
@@ -19,6 +20,7 @@
             Email.getAllEmails(function (emails) {
                 if(emails.indexOf($scope.emailInput) > -1){
                     shareService.sharedValues.email = $scope.emailInput;
+                    $localStorage.email = $scope.emailInput
                     $state.go('home');
                 }
                 else{

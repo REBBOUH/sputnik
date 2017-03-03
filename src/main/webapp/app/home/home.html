@@ -1,29 +1,24 @@
 <div ng-cloak>
+    <div class="alert-danger notification">
+        <strong>Veuillez selectionner vos jours de d'absences SVP </strong>
+    </div>
     <div class="row print">
         <div class="col-md-4" >
-            Nom : <input type="text" class="form-control"/>
-            Prenom : <input type="text" class="form-control"/>
-            Email : <input type="email" class="form-control" value="{{vm.sharedValues.email}}" disabled/>
-            {{vm.emailInput}}
+            Nom : <input type="text" class="form-control" ng-model="firstName"/>
+            Prenom : <input type="text" class="form-control" ng-model="lastName"/>
+            Email : <input type="email" class="form-control" value="{{vm.email}}" disabled/>
         </div>
         <div class="col-md-8">
-            <div class="alert-danger notification">
-                <strong>Veuillez selectionner vos jours de d'absences SVP </strong>
-            </div>
             <calendar></calendar>
-            <button class="btn btn-default btn-validate" ng-click="vm.showDetails()">valider</button>
-            <button class="btn btn-default btn-validate" ng-click="vm.printDocument()">Enregistrer</button>
-
             <div class="panel panel-default" ng-show="vm.sharedValues.showDetail ">
                 <div class="panel-heading"> <h4>Summary of {{vm.sharedValues.selectedMonth}}</h4> </div>
-
                 <div class="panel-body">
                     <h4>
                         <span class="label label-success">Les jours travaillés</span>
                         <span class="badge">{{vm.sharedValues.workingDays}}</span>
                     </h4>
                     <h4>
-                        <span class="label label-warning">Les jours de d'absences</span>
+                        <span class="label label-warning">Les jours d'absences</span>
                         <span class="badge">{{vm.sharedValues.notWorkingDays.length}}</span>
                     </h4>
                 </div>
