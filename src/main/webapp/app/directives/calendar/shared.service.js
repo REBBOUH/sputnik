@@ -10,8 +10,9 @@
         .factory('shareService', ['$localStorage', shareService]);
 
     function shareService($localStorage) {
-        var shared = {workingDays: 0, email: '', selectedMonth: '', showDetail: false};
+        var shared = {workingDays: 0, showDetail: false};
         var selectedMonth = '';
+        var workingDays = 0;
         var notWorkingDays = {
             "01": [],
             "02": [],
@@ -31,11 +32,14 @@
         function syncFromLocalStorage() {
             if (angular.isDefined($localStorage.notWorkingDays)) {
                 notWorkingDays = JSON.parse($localStorage.notWorkingDays);
+                workingDays = JSON.parse($localStorage.workingDays);
             }
         }
 
         function syncToLocalStorage() {
+            $localStorage.selectedMonth = JSON.stringify(getSelectedMonth(selectedMonth));
             $localStorage.notWorkingDays = JSON.stringify(notWorkingDays);
+            $localStorage.workingDays = JSON.stringify(workingDays);
         }
 
 
@@ -72,6 +76,15 @@
 
         function setSelectedMonth(month) {
             selectedMonth = month;
+            syncToLocalStorage();
+        }
+        function getWorkingDays() {
+            return workingDays;
+        }
+
+        function setWorkingDays(WorkingDays) {
+            workingDays = WorkingDays;
+            syncToLocalStorage();
         }
 
         return {
@@ -83,7 +96,9 @@
             syncToLocalStorage: syncToLocalStorage,
             getSelectedMonth: getSelectedMonth,
             setSelectedMonth: setSelectedMonth,
+            setWorkingDays:setWorkingDays,
             notWorkingDays: notWorkingDays,
+            getWorkingDays:getWorkingDays,
             sharedValues: shared
         };
     }

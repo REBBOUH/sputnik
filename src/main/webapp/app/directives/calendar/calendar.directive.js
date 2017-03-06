@@ -11,10 +11,9 @@
     };
 
 
-
     angular
         .module('sputnikApp')
-        .directive("calendar", ['shareService','$localStorage', function (shareService , $localStorage) {
+        .directive("calendar", ['shareService', '$localStorage', function (shareService, $localStorage) {
             var holiday = {
                 "2017": [
                     new moment("01/01/2017", "DD/MM/YYYY"),
@@ -38,6 +37,7 @@
             var numOfMonthDays = selected.daysInMonth();
             var numWeekends = _getNumOfDays(selected, 6) + _getNumOfDays(selected, 7);
             var numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(selected));
+            shareService.setWorkingDays(numOfWorkingDay);
 
             return {
                 restrict: "E",
@@ -51,7 +51,6 @@
                     console.log(' Number of Weekends days ' + numWeekends);
                     console.log(' Number of holydays ' + _getNumHoliday());
                     $scope.sharedValues = shareService.sharedValues;
-                    $scope.sharedValues.workingDays = numOfWorkingDay;
                     shareService.setSelectedMonth(selected.format("MMMM"));
                     $scope.month = selected.clone();
                     var start = selected.clone();
@@ -72,10 +71,8 @@
                         console.log('Number of NonWorking days = ' + shareService.getNbNotWorkingDays(day.date));
                         numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(day.date));
                         console.log(' Number of WorkingDays ' + numOfWorkingDay);
-                        shareService.sharedValues.workingDays = numOfWorkingDay;
-                        //shareService.sharedValues.notWorkingDays = notWorkingDays;
                         console.log(shareService.notWorkingDays);
-                        console.log('notWorkingDays'+shareService.getNbNotWorkingDays(day.date));
+                        console.log('notWorkingDays' + shareService.getNbNotWorkingDays(day.date));
                     };
 
                     $scope.next = function () {
@@ -105,9 +102,9 @@
                 numOfMonthDays = moment(selectedDate).daysInMonth();
                 numWeekends = _getNumOfDays(selectedDate, 6) + _getNumOfDays(selectedDate, 7);
                 numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(selectedDate));
-                shareService.sharedValues.workingDays = numOfWorkingDay;
+                shareService.setWorkingDays(numOfWorkingDay);
                 //shareService.sharedValues.notWorkingDays = notWorkingDays;
-                shareService.setSelectedMonth( selectedDate.format("MMMM"));
+                shareService.setSelectedMonth(selectedDate.format("MMMM"));
             }
 
             function _getNumOfDays(date, weekday) {

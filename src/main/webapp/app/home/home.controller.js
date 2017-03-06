@@ -20,6 +20,7 @@
         vm.showDetails =showDetails;
         vm.printDocument = printDocument;
         vm.getSelectedMonth=shareService.getSelectedMonth;
+        vm.getWorkingDays= shareService.getWorkingDays;
 
         function printDocument(){
             var pdf = new jsPDF('p', 'pt', 'a4');
