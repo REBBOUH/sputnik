@@ -14,7 +14,7 @@
 
     angular
         .module('sputnikApp')
-        .directive("calendar", ['shareService', function (shareService) {
+        .directive("calendar", ['shareService','$localStorage', function (shareService , $localStorage) {
             var holiday = {
                 "2017": [
                     new moment("01/01/2017", "DD/MM/YYYY"),
@@ -32,51 +32,12 @@
             var selected = new moment();
             //var monthName = moment.months(selected.month());
             //console.log(monthName);
-            var notWorkingDays = {
-                "01": [],
-                "02": [],
-                "03": [],
-                "04": [],
-                "05": [],
-                "06": [],
-                "07": [],
-                "08": [],
-                "09": [],
-                "10": [],
-                "11": [],
-                "12": []
-            };
-
-            function getNbNotWorkingDays(day) {
-                return notWorkingDays[day.format("MM")].length;
-            }
-
-            function existNotWorkingDay(day) {
-                var monthNotWorkingDays = notWorkingDays[day.format("MM")];
-                return monthNotWorkingDays.includes(day.date());
-
-            }
-
-            function addNotWorkingDay(day) {
-                var monthNotWorkingDays = notWorkingDays[day.format("MM")];
-                if(!existNotWorkingDay(day)) {
-                    monthNotWorkingDays.push(day.date());
-                }
-            }
-
-            function removeNotWorkingDay(day) {
-                var monthNotWorkingDays = notWorkingDays[day.format("MM")];
-                var index = monthNotWorkingDays.indexOf(day.date());
-                if(index != -1) {
-                    monthNotWorkingDays.splice(index, 1);
-                }
-            }
 
             var selectedYear = selected.format("YYYY");
             var currentYearHolidays = holiday[selectedYear];
             var numOfMonthDays = selected.daysInMonth();
             var numWeekends = _getNumOfDays(selected, 6) + _getNumOfDays(selected, 7);
-            var numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + getNbNotWorkingDays(selected));
+            var numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(selected));
 
             return {
                 restrict: "E",
@@ -91,8 +52,7 @@
                     console.log(' Number of holydays ' + _getNumHoliday());
                     $scope.sharedValues = shareService.sharedValues;
                     $scope.sharedValues.workingDays = numOfWorkingDay;
-                    shareService.sharedValues.selectedMonth = selected.format("MMMM");
-
+                    shareService.setSelectedMonth(selected.format("MMMM"));
                     $scope.month = selected.clone();
                     var start = selected.clone();
                     start.date(1);
@@ -101,20 +61,21 @@
 
                     $scope.select = function (day) {
                         shareService.sharedValues.showDetail = false;
-                        if (existNotWorkingDay(day.date)) {
+                        if (shareService.existNotWorkingDay(day.date)) {
                             day.selectedDay = false;
-                            removeNotWorkingDay(day.date)
+                            shareService.removeNotWorkingDay(day.date)
                         }
                         else {
                             day.selectedDay = true;
-                            addNotWorkingDay(day.date)
+                            shareService.addNotWorkingDay(day.date)
                         }
-                        console.log('Number of NonWorking days = ' + getNbNotWorkingDays(day.date));
-                        numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + getNbNotWorkingDays(day.date));
+                        console.log('Number of NonWorking days = ' + shareService.getNbNotWorkingDays(day.date));
+                        numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(day.date));
                         console.log(' Number of WorkingDays ' + numOfWorkingDay);
                         shareService.sharedValues.workingDays = numOfWorkingDay;
-                        shareService.sharedValues.notWorkingDays = notWorkingDays;
-                        console.log(notWorkingDays);
+                        //shareService.sharedValues.notWorkingDays = notWorkingDays;
+                        console.log(shareService.notWorkingDays);
+                        console.log('notWorkingDays'+shareService.getNbNotWorkingDays(day.date));
                     };
 
                     $scope.next = function () {
@@ -143,10 +104,10 @@
                 selected = selectedDate;
                 numOfMonthDays = moment(selectedDate).daysInMonth();
                 numWeekends = _getNumOfDays(selectedDate, 6) + _getNumOfDays(selectedDate, 7);
-                numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + getNbNotWorkingDays(selectedDate));
+                numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(selectedDate));
                 shareService.sharedValues.workingDays = numOfWorkingDay;
-                shareService.sharedValues.notWorkingDays = notWorkingDays;
-                shareService.sharedValues.selectedMonth = selectedDate.format("MMMM");
+                //shareService.sharedValues.notWorkingDays = notWorkingDays;
+                shareService.setSelectedMonth( selectedDate.format("MMMM"));
             }
 
             function _getNumOfDays(date, weekday) {
@@ -186,7 +147,7 @@
                 var days = [];
                 for (var i = 0; i < 7; i++) {
                     days.push({
-                        selectedDay: existNotWorkingDay(date),
+                        selectedDay: shareService.existNotWorkingDay(date),
                         name: date.format("dd").substring(0, 1),
                         number: date.date(),
                         isCurrentMonth: date.month() === month.month(),

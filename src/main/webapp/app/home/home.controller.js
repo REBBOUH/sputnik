@@ -18,8 +18,9 @@
         vm.login = LoginService.open;
         vm.register = register;
         vm.showDetails =showDetails;
-
         vm.printDocument = printDocument;
+        vm.getSelectedMonth=shareService.getSelectedMonth;
+
         function printDocument(){
             var pdf = new jsPDF('p', 'pt', 'a4');
             pdf.addHTML(document.getElementsByClassName("print"),1,30, function() {
