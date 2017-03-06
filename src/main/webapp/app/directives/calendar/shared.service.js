@@ -13,6 +13,7 @@
         var shared = {workingDays: 0, showDetail: false};
         var selectedMonth = '';
         var workingDays = 0;
+        var selectedDate;
         var notWorkingDays = {
             "01": [],
             "02": [],
@@ -33,6 +34,7 @@
             if (angular.isDefined($localStorage.notWorkingDays)) {
                 notWorkingDays = JSON.parse($localStorage.notWorkingDays);
                 workingDays = JSON.parse($localStorage.workingDays);
+                selectedDate = JSON.parse($localStorage.selectedDate);
             }
         }
 
@@ -40,6 +42,7 @@
             $localStorage.selectedMonth = JSON.stringify(getSelectedMonth(selectedMonth));
             $localStorage.notWorkingDays = JSON.stringify(notWorkingDays);
             $localStorage.workingDays = JSON.stringify(workingDays);
+            $localStorage.selectedDate = JSON.stringify(selectedDate);
         }
 
 
@@ -74,10 +77,16 @@
             return selectedMonth;
         }
 
-        function setSelectedMonth(month) {
-            selectedMonth = month;
+        function getSelectedDate() {
+            return selectedDate;
+        }
+
+        function setSelectedMonthAndDate(date) {
+            selectedMonth = date.format("MMMM");
+            selectedDate = date;
             syncToLocalStorage();
         }
+
         function getWorkingDays() {
             return workingDays;
         }
@@ -95,10 +104,11 @@
             syncFromLocalStorage: syncFromLocalStorage,
             syncToLocalStorage: syncToLocalStorage,
             getSelectedMonth: getSelectedMonth,
-            setSelectedMonth: setSelectedMonth,
-            setWorkingDays:setWorkingDays,
+            setSelectedMonthAndDate: setSelectedMonthAndDate,
+            setWorkingDays: setWorkingDays,
+            getSelectedDate: getSelectedDate,
             notWorkingDays: notWorkingDays,
-            getWorkingDays:getWorkingDays,
+            getWorkingDays: getWorkingDays,
             sharedValues: shared
         };
     }

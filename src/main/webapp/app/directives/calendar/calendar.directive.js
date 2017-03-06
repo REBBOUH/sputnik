@@ -29,8 +29,7 @@
                 ]
             };
             var selected = new moment();
-            //var monthName = moment.months(selected.month());
-            //console.log(monthName);
+            shareService.setSelectedMonthAndDate(selected);
 
             var selectedYear = selected.format("YYYY");
             var currentYearHolidays = holiday[selectedYear];
@@ -51,7 +50,7 @@
                     console.log(' Number of Weekends days ' + numWeekends);
                     console.log(' Number of holydays ' + _getNumHoliday());
                     $scope.sharedValues = shareService.sharedValues;
-                    shareService.setSelectedMonth(selected.format("MMMM"));
+                    shareService.setSelectedMonthAndDate(selected);
                     $scope.month = selected.clone();
                     var start = selected.clone();
                     start.date(1);
@@ -70,6 +69,7 @@
                         }
                         console.log('Number of NonWorking days = ' + shareService.getNbNotWorkingDays(day.date));
                         numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(day.date));
+                        shareService.setWorkingDays(numOfWorkingDay);
                         console.log(' Number of WorkingDays ' + numOfWorkingDay);
                         console.log(shareService.notWorkingDays);
                         console.log('notWorkingDays' + shareService.getNbNotWorkingDays(day.date));
@@ -103,8 +103,7 @@
                 numWeekends = _getNumOfDays(selectedDate, 6) + _getNumOfDays(selectedDate, 7);
                 numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(selectedDate));
                 shareService.setWorkingDays(numOfWorkingDay);
-                //shareService.sharedValues.notWorkingDays = notWorkingDays;
-                shareService.setSelectedMonth(selectedDate.format("MMMM"));
+                shareService.setSelectedMonthAndDate(selectedDate);
             }
 
             function _getNumOfDays(date, weekday) {
