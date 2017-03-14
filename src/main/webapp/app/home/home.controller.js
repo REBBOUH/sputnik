@@ -9,8 +9,8 @@
 
     function HomeController($scope, Principal, LoginService, $state, shareService, $localStorage) {
         var vm = this;
-        $scope.firstName = '';
-        $scope.lastName = '';
+        vm.firstName = $localStorage.firstName;
+        vm.lastName = $localStorage.lasttName;
         vm.email = $localStorage.email;
         vm.sharedValues = shareService.sharedValues;
         vm.account = null;
@@ -25,7 +25,6 @@
 
         function getNbNotWorkingDays() {
             return shareService.getNbNotWorkingDays(shareService.getSelectedDate());
-
         }
 
         function printDocument() {
@@ -36,13 +35,19 @@
         }
 
         function showDetails() {
-            $localStorage.firstName = $scope.firstName;
-            $localStorage.lasttName = $scope.lastName;
+            $localStorage.firstName = vm.firstName;
+            $localStorage.lasttName = vm.lastName;
             shareService.sharedValues.showDetail = true;
         }
 
         $scope.$on('authenticationSuccess', function () {
             getAccount();
+        });
+
+        $scope.$on('logout', function () {
+            vm.firstName = "";
+            vm.lastName = "";
+            vm.email = "";
         });
 
         getAccount();
@@ -51,6 +56,11 @@
             Principal.identity().then(function (account) {
                 vm.account = account;
                 vm.isAuthenticated = Principal.isAuthenticated;
+                if (vm.isAuthenticated()) {
+                    $scope.firstName = account.firstName;
+                    $scope.lastName = account.lastName;
+                    vm.email = account.email;
+                }
             });
         }
 

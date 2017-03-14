@@ -3,10 +3,15 @@
         <strong>Veuillez selectionner vos jours de d'absences SVP </strong>
     </div>
     <div class="row print">
-        <div class="col-md-4" >
-            Nom : <input type="text" class="form-control" ng-model="firstName"/>
-            Prenom : <input type="text" class="form-control" ng-model="lastName"/>
+        <div class="col-md-4" ng-hide="vm.isAuthenticated()">
+            Nom : <input type="text" class="form-control" ng-model="vm.firstName"/>
+            Prenom : <input type="text" class="form-control" ng-model="vm.lastName"/>
             Email : <input type="email" class="form-control" value="{{vm.email}}" disabled/>
+        </div>
+        <div class="col-md-4" ng-show="vm.isAuthenticated()">
+           <label>Nom :</label>  <label>{{vm.firstName}}</label><br/>
+           <label>Prénom :</label>  <label>{{vm.lastName}}</label><br/>
+           <label>Email :</label>  <label>{{vm.email}}</label><br/>
         </div>
         <div class="col-md-8">
             <calendar></calendar>
