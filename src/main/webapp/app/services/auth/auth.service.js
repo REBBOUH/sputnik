@@ -126,6 +126,7 @@
         function logout () {
             AuthServerProvider.logout();
             Principal.authenticate(null);
+            $rootScope.$broadcast('logout');
         }
 
         function resetPasswordFinish (keyAndPassword, callback) {
