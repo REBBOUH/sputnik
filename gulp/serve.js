@@ -16,6 +16,7 @@ module.exports = function () {
     // to correctly handle them.
     var proxyRoutes = [
         '/emails',
+        '/api/notWorkingDays',
         '/api',
         '/management',
         '/swagger-resources',
