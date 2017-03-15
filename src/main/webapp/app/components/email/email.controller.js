@@ -33,6 +33,8 @@
             Email.getAllEmails(function (emails) {
                 if (emails.indexOf(vm.email) > -1) {
                     $localStorage.email = vm.email;
+                    $localStorage.firstName = "";
+                    $localStorage.lasttName = "";
                     $state.go('home');
                 }
                 else {
