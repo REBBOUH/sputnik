@@ -22,22 +22,14 @@
         vm.getSelectedMonth = shareService.getSelectedMonth;
         vm.getWorkingDays = shareService.getWorkingDays;
         vm.getNbNotWorkingDays = getNbNotWorkingDays;
+        vm.isAuthenticated = Principal.isAuthenticated;
+
 
         function getNbNotWorkingDays() {
             return shareService.getNbNotWorkingDays(shareService.getSelectedDate());
         }
 
         function printDocument() {
-            var pdf = new jsPDF('p', 'pt', 'a4');
-            pdf.addHTML(document.getElementsByClassName("print"), 1, 30, function () {
-                pdf.save('rapport.pdf');
-            });
-        }
-
-        function showDetails() {
-            $localStorage.firstName = vm.firstName;
-            $localStorage.lasttName = vm.lastName;
-            shareService.sharedValues.showDetail = true;
             var notWorkingDays = JSON.parse($localStorage.notWorkingDays);
             var i;
             for (i = 1; i <=12 ; i++) {
@@ -52,9 +44,21 @@
                 days = JSON.stringify(notWorkingDays[month]);
                 data = {"month": month, "days": days};
                 createNotWorkingDays({"month": month, "days": days},function () {
-                  console.log("success");
+                    console.log("success");
                 });
             }
+          /*  if(!vm.isAuthenticated())
+                $state.go('register');*/
+            var pdf = new jsPDF('p', 'pt', 'a4');
+            pdf.addHTML(document.getElementsByClassName("print"), 1, 30, function () {
+                pdf.save('rapport.pdf');
+            });
+        }
+
+        function showDetails() {
+            $localStorage.firstName = vm.firstName;
+            $localStorage.lasttName = vm.lastName;
+            shareService.sharedValues.showDetail = true;
         }
 
         function createNotWorkingDays (data, callback) {
@@ -84,7 +88,6 @@
         function getAccount() {
             Principal.identity().then(function (account) {
                 vm.account = account;
-                vm.isAuthenticated = Principal.isAuthenticated;
                 if (vm.isAuthenticated()) {
                     vm.firstName = account.firstName;
                     vm.lastName = account.lastName;

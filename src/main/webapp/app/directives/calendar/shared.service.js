@@ -107,7 +107,6 @@
             setSelectedMonthAndDate: setSelectedMonthAndDate,
             setWorkingDays: setWorkingDays,
             getSelectedDate: getSelectedDate,
-            notWorkingDays: notWorkingDays,
             getWorkingDays: getWorkingDays,
             sharedValues: shared
         };

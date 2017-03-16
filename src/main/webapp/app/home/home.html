@@ -1,19 +1,19 @@
 <div ng-cloak>
-    <div class="alert-danger notification col-md-offset-6 col-md-5">
+    <div class="alert-danger notification col-md-offset-5 col-md-5">
         <strong>Veuillez selectionner vos jours de d'absences SVP </strong>
     </div>
     <div class="row print">
-        <div class="col-md-4" ng-hide="vm.isAuthenticated()">
+        <div class="col-md-3" ng-hide="vm.isAuthenticated()">
             Nom : <input type="text" class="form-control" ng-model="vm.firstName"/>
             Prenom : <input type="text" class="form-control" ng-model="vm.lastName"/>
             Email : <input type="email" class="form-control" value="{{vm.email}}" disabled/>
         </div>
-        <div class="col-md-4" ng-show="vm.isAuthenticated()">
+        <div class="col-md-3" ng-show="vm.isAuthenticated()">
            <label>Nom :</label>  <label>{{vm.firstName}}</label><br/>
            <label>Prénom :</label>  <label>{{vm.lastName}}</label><br/>
            <label>Email :</label>  <label>{{vm.email}}</label><br/>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
             <calendar></calendar>
 
             <div class="panel panel-default" ng-show="vm.sharedValues.showDetail ">
