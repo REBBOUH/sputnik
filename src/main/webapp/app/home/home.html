@@ -9,15 +9,15 @@
             Email : <input type="email" class="form-control" value="{{vm.email}}" disabled/>
         </div>
         <div class="col-md-3" ng-show="vm.isAuthenticated()">
-           <label>Nom :</label>  <label>{{vm.firstName}}</label><br/>
-           <label>Prénom :</label>  <label>{{vm.lastName}}</label><br/>
-           <label>Email :</label>  <label>{{vm.email}}</label><br/>
+            <label>Nom :</label> <label>{{vm.firstName}}</label><br/>
+            <label>Prénom :</label> <label>{{vm.lastName}}</label><br/>
+            <label>Email :</label> <label>{{vm.email}}</label><br/>
         </div>
         <div class="col-md-9">
             <calendar></calendar>
 
             <div class="panel panel-default" ng-show="vm.sharedValues.showDetail ">
-                <div class="panel-heading"> <h4>Summary of {{vm.getSelectedMonth()}}</h4> </div>
+                <div class="panel-heading"><h4>Summary of {{vm.getSelectedMonth()}}</h4></div>
                 <div class="panel-body">
                     <h4>
                         <span class="label label-success">Les jours travaillés</span>
@@ -34,7 +34,27 @@
     <div class="row">
         <div class="home-buttons">
             <button class="btn btn-default btn-validate" ng-click="vm.showDetails()">valider</button>
-            <button class="btn btn-default btn-save" ng-click="vm.printDocument()"ng-disabled="!vm.sharedValues.showDetail">Enregistrer</button>
+            <button class="btn btn-default btn-save" ng-click="vm.printDocument()"
+                    ng-disabled="!vm.sharedValues.showDetail">Enregistrer
+            </button>
+
+            <button class="btn btn-default btn-validate" ng-click="vm.showHistory()">Historique</button>
         </div>
+    </div>
+    <div class="col-md-offset-3" ng-show="vm.history" >
+        <table class="table table-bordered table-striped table-hover ">
+            <thead >
+            <tr>
+                <th>Mois</th>
+                <th>Jours Non Travaillés</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="notWorkingDay in vm.notWorkingDays| orderBy:'month'">
+                <td>{{notWorkingDay.month}}</td>
+                <td>{{notWorkingDay.days}}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>

@@ -8,6 +8,6 @@
     notWorkingDays.$inject = ['$resource'];
 
     function notWorkingDays ($resource) {
-        return $resource('api/notWorkingDays');
+        return $resource('api/notWorkingDays',{'query': {method: 'GET', isArray: true}});
     }
 })();
