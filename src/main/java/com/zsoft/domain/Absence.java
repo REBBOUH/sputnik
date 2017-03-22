@@ -3,30 +3,49 @@ package com.zsoft.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-
 @Document
 public class Absence {
 
     @Id
     public String id;
-    public LocalDate date;
+    public Integer year;
+    public Integer month;
+    public Integer day;
     public Boolean demiJournee;
 
-    public String getId() {
-        return id;
+
+    public Absence(Integer year, Integer month, Integer day, Boolean demiJournee) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.demiJournee = demiJournee;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Absence() {
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getDay() {
+        return day;
+    }
+
+    public void setDay(Integer day) {
+        this.day = day;
     }
 
     public Boolean getDemiJournee() {
@@ -37,19 +56,10 @@ public class Absence {
         this.demiJournee = demiJournee;
     }
 
-    public Absence(LocalDate date, Boolean demiJournee) {
-
-        this.date = date;
-        this.demiJournee = demiJournee;
-    }
-
-    public Absence() {
-
-    }
-
     @Override
     public String toString() {
-        return String.format("Absence [id=%s, date='%s', demi Journée ='%s']", id, date, demiJournee);
+        return String.format("Absence [id=%s, year='%s', month='%s', day='%s', demi Journée ='%s']",
+            id, year, month, day, demiJournee);
     }
 
 }

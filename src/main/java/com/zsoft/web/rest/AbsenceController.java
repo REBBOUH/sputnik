@@ -27,14 +27,18 @@ public class AbsenceController {
         return absenceRepository.findAll();
     }
 
+    @GetMapping(value = "/absence", params = {"year", "month"})
+    public List<Absence> getAllAbsences(@RequestParam(value = "year") Integer year, @RequestParam(value = "year") Integer month) {
+        return absenceRepository.findByYearAndMonth(year, month);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/absence")
     public Absence createAbsence(@Valid @RequestBody Absence absence) {
-        Absence existingAbsence = absenceRepository.findByDate(absence.date);
+        Absence existingAbsence = absenceRepository.findByYearAndMonthAndDay(absence.year, absence.month, absence.day);
         if (existingAbsence == null) {
             return absenceRepository.save(absence);
         } else {
-            existingAbsence.date = absence.date;
             existingAbsence.demiJournee = absence.demiJournee;
             return absenceRepository.save(existingAbsence);
         }
