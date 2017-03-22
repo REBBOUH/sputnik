@@ -8,13 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.matchers.Find;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -27,28 +26,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SputnikApp.class)
 public class AbsenceControllerTest {
-    private MockMvc mockMvc;
+    private MockMvc restAbsenceMockMvc;
 
     @Autowired
     private AbsenceRepository absenceRepository;
 
     private AbsenceController absenceController;
-    Absence day2 = new Absence(LocalDate.now(), false);
-    Absence day1 = new Absence(LocalDate.of(2017, 03, 22), true);
+    Absence day2 = new Absence(2017, 03, 22, false);
+    Absence day1 = new Absence(2017, 03, 23, false);
+    Absence day3 = new Absence(2017, 04, 23, false);
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         absenceController = new AbsenceController(absenceRepository);
-        mockMvc = MockMvcBuilders.standaloneSetup(absenceController).build();
-
+        restAbsenceMockMvc = MockMvcBuilders.standaloneSetup(absenceController).build();
     }
 
     @Test
     public void findAll() throws Exception {
         assertThat(absenceController).isNotNull();
-
-        mockMvc.perform(get("/api/absence"))
+        restAbsenceMockMvc.perform(get("/api/absence"))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json;charset=UTF-8"));
@@ -56,22 +54,51 @@ public class AbsenceControllerTest {
 
     @Test
     public void saveAbsence() throws Exception {
-        mockMvc.perform(post("/api/absence")
+        restAbsenceMockMvc.perform(post("/api/absence")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(day1)))
             .andDo(print())
             .andExpect(status().isCreated());
 
-        mockMvc.perform(post("/api/absence")
+        restAbsenceMockMvc.perform(post("/api/absence")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(day2)))
             .andDo(print())
             .andExpect(status().isCreated());
         findAll();
     }
+
+
+    @Test
+    public void getAbsencesByYearAndMonth() throws Exception {
+        restAbsenceMockMvc.perform(post("/api/absence")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(day1)))
+            .andDo(print())
+            .andExpect(status().isCreated());
+
+        restAbsenceMockMvc.perform(post("/api/absence")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(day2)))
+            .andDo(print())
+            .andExpect(status().isCreated());
+
+        restAbsenceMockMvc.perform(post("/api/absence")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(day3)))
+            .andDo(print())
+            .andExpect(status().isCreated());
+
+        String regex = "\\[\\{\"id\":\".{24}\",\"year\":2017,\"month\":4,\"day\":23,\"demiJournee\":false\\}\\]";
+        restAbsenceMockMvc.perform(get("/api/absence").param("year", "2017").param("month", "04"))
+            .andDo(print())
+            .andExpect(content().string(new Find(regex)))
+            .andExpect(status().isOk()).andReturn();
+    }
+
     @Test
     public void UpdateAbsence() throws Exception {
-        mockMvc.perform(post("/api/absence")
+        restAbsenceMockMvc.perform(post("/api/absence")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(day1)))
             .andDo(print())
@@ -79,7 +106,7 @@ public class AbsenceControllerTest {
 
         day1.setDemiJournee(false);
 
-        mockMvc.perform(post("/api/absence")
+        restAbsenceMockMvc.perform(post("/api/absence")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(day1)))
             .andDo(print())
@@ -88,14 +115,14 @@ public class AbsenceControllerTest {
     }
 
     @Test
-    public void deleteAbsence() throws Exception{
+    public void deleteAbsence() throws Exception {
         day1.setId("123");
-        mockMvc.perform(post("/api/absence")
+        restAbsenceMockMvc.perform(post("/api/absence")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(day1)))
             .andDo(print())
             .andExpect(status().isCreated());
-        mockMvc.perform(delete("/api/absence/123")
+        restAbsenceMockMvc.perform(delete("/api/absence/123")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(day1)))
             .andDo(print())
@@ -105,14 +132,14 @@ public class AbsenceControllerTest {
     }
 
     @Test
-    public void deleteAllAbsences() throws Exception{
-        mockMvc.perform(post("/api/absence")
+    public void deleteAllAbsences() throws Exception {
+        restAbsenceMockMvc.perform(post("/api/absence")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(day1)))
             .andDo(print())
             .andExpect(status().isCreated());
 
-        mockMvc.perform(delete("/api/absence")
+        restAbsenceMockMvc.perform(delete("/api/absence")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes("")))
             .andDo(print())

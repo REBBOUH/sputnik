@@ -28,7 +28,7 @@ public class AbsenceController {
     }
 
     @GetMapping(value = "/absence", params = {"year", "month"})
-    public List<Absence> getAllAbsences(@RequestParam(value = "year") Integer year, @RequestParam(value = "year") Integer month) {
+    public List<Absence> getAllAbsencesByYearAndMonth(@RequestParam(value = "year") Integer year, @RequestParam(value = "month") Integer month) {
         return absenceRepository.findByYearAndMonth(year, month);
     }
 
