@@ -67,15 +67,17 @@ calendar {
       line-height: 30px !important;
       display: inline-block;
       vertical-align: middle;
-      background: white;
+      background: #15d228;
       cursor: pointer;
       color: black; }
       calendar > div.week > span.day:first-child {
         border-left: none; }
       calendar > div.week > span.day.today {
-        background: #E3F2FF; }
+        background: #15d228;
+        border: 2px solid rgba(13, 70, 208, 0.75); }
       calendar > div.week > span.day.different-month {
-        color: #C0C0C0;
+        color: rgba(28, 28, 28, 0.62);
+        background: rgba(211, 212, 209, 0.99);
         pointer-events: none;
         cursor: not-allowed; }
       calendar > div.week > span.day.weekend {
@@ -84,9 +86,13 @@ calendar {
       calendar > div.week > span.day.selectedDay {
         background-color: #ff4645;
         color: white; }
+      calendar > div.week > span.day.demiJournee {
+        background: linear-gradient(to right, #ff4645 50%, #15d228 51%);
+        color: white; }
       calendar > div.week > span.day.selected {
         background: #2875C7;
         color: white; }
     calendar > div.week.names > span {
       color: #2875C7;
-      font-weight: bold; }
+      font-weight: bold;
+      background: #fff; }
