@@ -5,9 +5,9 @@
         .module('sputnikApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'shareService', '$localStorage', 'notWorkingDays', '$mdDialog'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'shareService', '$localStorage', 'notWorkingDays', 'absence', '$log'];
 
-    function HomeController($scope, Principal, LoginService, $state, shareService, $localStorage, notWorkingDays, $mdDialog) {
+    function HomeController($scope, Principal, LoginService, $state, shareService, $localStorage, notWorkingDays, absence, $log) {
         var vm = this;
         vm.firstName = $localStorage.firstName;
         vm.lastName = $localStorage.lasttName;
@@ -27,13 +27,11 @@
         vm.isAuthenticated = Principal.isAuthenticated;
         vm.notWorkingDays = "";
 
-
         function getNbNotWorkingDays() {
             return shareService.getNbNotWorkingDays(shareService.getSelectedDate());
         }
 
         function printDocument() {
-
             if (vm.isAuthenticated()) {
                 var pdf = new jsPDF('p', 'pt', 'a4');
                 pdf.addHTML(document.getElementsByClassName("print"), 1, 30, function () {
@@ -53,10 +51,10 @@
                     days = JSON.stringify(notWorkingDays[month]);
                     data = {"month": month, "days": days};
                     createNotWorkingDays({"month": month, "days": days}, function () {
-                        console.log("success");
+                        $log.info("success");
                     });
                 }
-            }else{
+            } else {
                 $state.go('register');
             }
         }
@@ -75,7 +73,7 @@
                     getNotWorkingDays(function (result) {
                         vm.notWorkingDays = result;
                     });
-                }else{
+                } else {
                     $state.go('register');
                 }
                 vm.history = true;
@@ -95,7 +93,6 @@
 
         function getNotWorkingDays(callback) {
             var cb = callback || angular.noop;
-
             return notWorkingDays.query(
                 function (response) {
                     return cb(response);
@@ -105,6 +102,37 @@
                 }).$promise;
         }
 
+        function getAbsences(callback) {
+            var cb = callback || angular.noop;
+            return absence.query(
+                function (response) {
+                    return cb(response);
+                },
+                function (err) {
+                    return cb(err);
+                }).$promise;
+        }
+
+        function createAbsence(data, callback) {
+            var cb = callback || angular.noop;
+            return absence.save(data,
+                function () {
+                    return cb(data);
+                },
+                function (err) {
+                    return cb(err);
+                }).$promise;
+        };
+
+        /* createAbsence({"year": 2017, "month": 3, "day": 30, "demiJournee": true}, function () {
+         $log.info("success");
+         });*/
+
+        getAbsences(function (result) {
+            result.forEach(function (absence) {
+                $log.info(absence);
+            });
+        });
 
         $scope.$on('authenticationSuccess', function () {
             getAccount();
