@@ -22,6 +22,7 @@
         vm.logout = logout;
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
+        vm.absence = absence;
         vm.$state = $state;
         vm.isAuthenticated = Principal.isAuthenticated;
 
@@ -44,6 +45,12 @@
             vm.isNavbarCollapsed = true;
             if (vm.isAuthenticated()) {
                 $state.go("home")
+            }
+        }
+
+        function absence() {
+            if (vm.isAuthenticated()) {
+                $state.go("absence")
             }
         }
     }
