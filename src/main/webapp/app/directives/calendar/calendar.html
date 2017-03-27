@@ -13,7 +13,7 @@
     <span class="day">Sun</span>
 </div>
 <div class="week" ng-repeat="week in weeks">
-    <span class="day" ng-class="{ today: day.isToday, 'different-month': !day.isCurrentMonth, 'weekend': !day.active, 'selectedDay': day.selectedDay }" ng-click="day.active && select(day)" ng-repeat="day in week.days">{{day.number}}</span>
+    <span class="day" ng-class="{ today: day.isToday, 'different-month': !day.isCurrentMonth, 'weekend': !day.active, 'selectedDay': day.selectedDay, 'demiJournee': day.demiJournee }" ng-click="day.active && select(day)" ng-repeat="day in week.days">{{day.number}}</span>
 </div>
 <div>
 

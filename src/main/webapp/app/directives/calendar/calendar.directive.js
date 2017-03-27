@@ -35,7 +35,7 @@
             var currentYearHolidays = holiday[selectedYear];
             var numOfMonthDays = selected.daysInMonth();
             var numWeekends = _getNumOfDays(selected, 6) + _getNumOfDays(selected, 7);
-            var numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(selected));
+            var numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbAbsences(selected));
             shareService.setWorkingDays(numOfWorkingDay);
 
             return {
@@ -59,20 +59,29 @@
 
                     $scope.select = function (day) {
                         shareService.sharedValues.showDetail = false;
-                        if (shareService.existNotWorkingDay(day.date)) {
+                        if (shareService.isDemiJournee(day.date)) {
                             day.selectedDay = false;
+                            day.demiJournee = false;
                             shareService.removeNotWorkingDay(day.date)
-                        }
-                        else {
+                            shareService.removeAbsence(day.date);
+                        } else if (shareService.existAbsence(day.date, false)) {
+                            day.selectedDay = false;
+                            day.demiJournee = true;
+                            shareService.addAbsence(day.date, true);
+                            shareService.addNotWorkingDay(day.date);
+                        } else {
                             day.selectedDay = true;
-                            shareService.addNotWorkingDay(day.date)
+                            day.demiJournee = false;
+                            shareService.addAbsence(day.date, false);
+                            shareService.addNotWorkingDay(day.date);
                         }
-                        console.log('Number of NonWorking days = ' + shareService.getNbNotWorkingDays(day.date));
-                        numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(day.date));
+
+                        console.log('Number of NonWorking days = ' + shareService.getNbAbsences(day.date));
+                        numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbAbsences(day.date));
                         shareService.setWorkingDays(numOfWorkingDay);
                         console.log(' Number of WorkingDays ' + numOfWorkingDay);
                         console.log(shareService.notWorkingDays);
-                        console.log('notWorkingDays' + shareService.getNbNotWorkingDays(day.date));
+                        console.log('notWorkingDays' + shareService.getNbAbsences(day.date));
                     };
 
                     $scope.next = function () {
@@ -101,7 +110,7 @@
                 selected = selectedDate;
                 numOfMonthDays = moment(selectedDate).daysInMonth();
                 numWeekends = _getNumOfDays(selectedDate, 6) + _getNumOfDays(selectedDate, 7);
-                numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbNotWorkingDays(selectedDate));
+                numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbAbsences(selectedDate));
                 shareService.setWorkingDays(numOfWorkingDay);
                 shareService.setSelectedMonthAndDate(selectedDate);
             }
@@ -144,6 +153,7 @@
                 for (var i = 0; i < 7; i++) {
                     days.push({
                         selectedDay: shareService.existNotWorkingDay(date),
+                        demiJournee: shareService.isDemiJournee(date),
                         name: date.format("dd").substring(0, 1),
                         number: date.date(),
                         isCurrentMonth: date.month() === month.month(),

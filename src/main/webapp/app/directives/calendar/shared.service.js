@@ -129,8 +129,18 @@
             return exist;
         }
 
-        function getNbNotWorkingDays(day) {
-            return notWorkingDays[day.format("MM")].length;
+        function getNbAbsences(day) {
+            var absencesByMonth = absences[day.format("MM")];
+            var nbAbsences = 0;
+            absencesByMonth.forEach(function (absence) {
+                if (absence.demiJournee) {
+                    nbAbsences = nbAbsences + 0.5;
+                }
+                else {
+                    nbAbsences = nbAbsences + 1;
+                }
+            });
+            return nbAbsences;
         }
 
         function existNotWorkingDay(day) {
@@ -180,7 +190,7 @@
         }
 
         return {
-            getNbNotWorkingDays: getNbNotWorkingDays,
+            getNbAbsences: getNbAbsences,
             existNotWorkingDay: existNotWorkingDay,
             existAbsence: existAbsence,
             removeAbsence: removeAbsence,

@@ -23,12 +23,12 @@
         vm.printDocument = printDocument;
         vm.getSelectedMonth = shareService.getSelectedMonth;
         vm.getWorkingDays = shareService.getWorkingDays;
-        vm.getNbNotWorkingDays = getNbNotWorkingDays;
+        vm.getNbAbsences = getNbNotWorkingDays;
         vm.isAuthenticated = Principal.isAuthenticated;
         vm.notWorkingDays = "";
 
         function getNbNotWorkingDays() {
-            return shareService.getNbNotWorkingDays(shareService.getSelectedDate());
+            return shareService.getNbAbsences(shareService.getSelectedDate());
         }
 
         function printDocument() {
