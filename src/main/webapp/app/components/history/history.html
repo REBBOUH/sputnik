@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-offset-3 col-md-6 col-md-offset-3 ">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Historique des absences </div>
+            <div class="panel-body" style="height:450px; overflow-x:scroll">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Année</th>
+                            <th>Mois</th>
+                            <th>Jour</th>
+                            <th>demi journée</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="absence in vm.absences| orderBy:'year'">
+                            <td>{{absence.year}}</td>
+                            <td>{{absence.month}}</td>
+                            <td>{{absence.day}}</td>
+                            <td><input type="checkbox" ng-checked="absence.demiJournee" disabled/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

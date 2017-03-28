@@ -15,11 +15,19 @@
         <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
+                    <a ui-sref="history" ng-click="vm.history()">
+                        <span class="glyphicon glyphicon-list-alt"></span>
+                        <span class="hidden-sm">Hystorique</span>
+                    </a>
+                </li>
+
+                <li ui-sref-active="active">
                     <a ui-sref="absence" ng-click="vm.absence()">
                         <span class="glyphicon glyphicon-calendar"></span>
                         <span class="hidden-sm">Absences</span>
                     </a>
                 </li>
+
                 <li ui-sref-active="active">
                     <a ui-sref="home" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-home"></span>
