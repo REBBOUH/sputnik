@@ -18,16 +18,14 @@
         vm.login = LoginService.open;
         vm.register = register;
         vm.showDetails = showDetails;
-        vm.showHistory = showHistory;
-        vm.history = false;
         vm.printDocument = printDocument;
         vm.getSelectedMonth = shareService.getSelectedMonth;
         vm.getWorkingDays = shareService.getWorkingDays;
-        vm.getNbAbsences = getNbNotWorkingDays;
+        vm.getNbAbsences = getNbAbsences;
         vm.isAuthenticated = Principal.isAuthenticated;
         vm.notWorkingDays = "";
 
-        function getNbNotWorkingDays() {
+        function getNbAbsences() {
             return shareService.getNbAbsences(shareService.getSelectedDate());
         }
 
@@ -65,21 +63,6 @@
             shareService.sharedValues.showDetail = true;
         }
 
-        function showHistory() {
-            if (vm.history == true) {
-                vm.history = false;
-            } else {
-                if (vm.isAuthenticated()) {
-                    getNotWorkingDays(function (result) {
-                        vm.notWorkingDays = result;
-                    });
-                } else {
-                    $state.go('register');
-                }
-                vm.history = true;
-            }
-        }
-
         function createNotWorkingDays(data, callback) {
             var cb = callback || angular.noop;
             return notWorkingDays.save(data,
@@ -91,16 +74,6 @@
                 }).$promise;
         };
 
-        function getNotWorkingDays(callback) {
-            var cb = callback || angular.noop;
-            return notWorkingDays.query(
-                function (response) {
-                    return cb(response);
-                },
-                function (err) {
-                    return cb(err);
-                }).$promise;
-        }
 
         function getAbsences(callback) {
             var cb = callback || angular.noop;
@@ -112,21 +85,6 @@
                     return cb(err);
                 }).$promise;
         }
-
-        function createAbsence(data, callback) {
-            var cb = callback || angular.noop;
-            return absence.save(data,
-                function () {
-                    return cb(data);
-                },
-                function (err) {
-                    return cb(err);
-                }).$promise;
-        };
-
-        /* createAbsence({"year": 2017, "month": 3, "day": 30, "demiJournee": true}, function () {
-         $log.info("success");
-         });*/
 
         getAbsences(function (result) {
             result.forEach(function (absence) {
