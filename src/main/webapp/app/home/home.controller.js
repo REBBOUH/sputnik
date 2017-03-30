@@ -86,11 +86,11 @@
                 }).$promise;
         }
 
-        getAbsences(function (result) {
+        /*getAbsences(function (result) {
             result.forEach(function (absence) {
                 $log.info(absence);
             });
-        });
+        });*/
 
         $scope.$on('authenticationSuccess', function () {
             getAccount();

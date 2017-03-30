@@ -30,7 +30,8 @@
             };
             var selected = new moment();
             shareService.setSelectedMonthAndDate(selected);
-
+            var startDAy = null;
+            var endDay = null;
             var selectedYear = selected.format("YYYY");
             var currentYearHolidays = holiday[selectedYear];
             var numOfMonthDays = selected.daysInMonth();
@@ -45,10 +46,10 @@
                     selected: "=",
                 },
                 link: function ($scope) {
-                    //var test =moment("2017-09-25");
-                    console.log('number of day' + numOfMonthDays);
-                    console.log(' Number of Weekends days ' + numWeekends);
-                    console.log(' Number of holydays ' + _getNumHoliday());
+                    /* console.log('number of day' + numOfMonthDays);
+                     console.log(' Number of Weekends days ' + numWeekends);
+                     console.log(' Number of holydays ' + _getNumHoliday());
+                     */
                     $scope.sharedValues = shareService.sharedValues;
                     shareService.setSelectedMonthAndDate(selected);
                     $scope.month = selected.clone();
@@ -58,22 +59,51 @@
                     _buildMonth($scope, start, $scope.month);
 
                     $scope.select = function (day) {
-                        shareService.sharedValues.showDetail = false;
-                        if (shareService.isDemiJournee(day.date)) {
-                            day.selectedDay = false;
-                            day.demiJournee = false;
-                            shareService.removeNotWorkingDay(day.date)
-                            shareService.removeAbsence(day.date);
-                        } else if (shareService.existAbsence(day.date, false)) {
-                            day.selectedDay = false;
-                            day.demiJournee = true;
-                            shareService.addAbsence(day.date, true);
-                            shareService.addNotWorkingDay(day.date);
+                        if (event.shiftKey) {
+                            if (startDAy == null) {
+                                startDAy = day.date
+                            } else {
+                                endDay = day.date;
+                            }
+                            if (startDAy != null && endDay != null) {
+                                if (startDAy > endDay) {
+                                    var start = startDAy;
+                                    startDAy = endDay;
+                                    endDay = start;
+                                }
+                                for (var i = startDAy.date(); i <= endDay.date(); i++) {
+                                    var date = new moment("" + day.date.year() + "/" + day.date.format('M') + "/" + i, "YYYY/MM/DD");
+                                    if (date.weekday() != 6 && date.weekday() != 0) {
+                                            shareService.addAbsence(date, false);
+                                    }
+                                }
+                                var start = day.date.clone();
+                                _removeTime(start.month(start.month()).date(1));
+                                day.date.month(day.date.month());
+                                _buildMonth($scope, start, day.date);
+                                startDAy = null;
+                                endDay = null;
+                            }
                         } else {
-                            day.selectedDay = true;
-                            day.demiJournee = false;
-                            shareService.addAbsence(day.date, false);
-                            shareService.addNotWorkingDay(day.date);
+                            startDAy = null;
+                            endDay = null;
+                            shareService.sharedValues.showDetail = false;
+                            if (shareService.isDemiJournee(day.date)) {
+                                day.selectedDay = false;
+                                day.demiJournee = false;
+                                shareService.removeNotWorkingDay(day.date)
+                                shareService.removeAbsence(day.date);
+                            } else if (shareService.existAbsence(day.date, false)) {
+                                day.selectedDay = false;
+                                day.demiJournee = true;
+                                shareService.addAbsence(day.date, true);
+                                shareService.addNotWorkingDay(day.date);
+                            } else {
+                                day.selectedDay = true;
+                                day.demiJournee = false;
+                                shareService.addAbsence(day.date, false);
+                                shareService.addNotWorkingDay(day.date);
+                            }
                         }
 
                         console.log('Number of NonWorking days = ' + shareService.getNbAbsences(day.date));
@@ -152,7 +182,7 @@
                 var days = [];
                 for (var i = 0; i < 7; i++) {
                     days.push({
-                        selectedDay: shareService.existNotWorkingDay(date),
+                        selectedDay: shareService.existAbsenceDay(date),
                         demiJournee: shareService.isDemiJournee(date),
                         name: date.format("dd").substring(0, 1),
                         number: date.date(),

@@ -1,7 +1,3 @@
-/**
- * Created by Billel Boudjit on 27/02/2017.
- */
-
 (function () {
     'use strict';
 
@@ -118,6 +114,17 @@
             return exist;
         }
 
+        function existAbsenceDay(day) {
+            var exist = false;
+            var absencesByMonth = absences[day.format("MM")];
+            absencesByMonth.forEach(function (absence) {
+                if ((day.format("YYYY") == absence.year) && (day.format("MM") == absence.month) && (day.date() == absence.day)) {
+                    exist = true;
+                }
+            });
+            return exist;
+        }
+
         function isDemiJournee(day) {
             var exist = false;
             var absencesByMonth = absences[day.format("MM")];
@@ -193,6 +200,7 @@
             getNbAbsences: getNbAbsences,
             existNotWorkingDay: existNotWorkingDay,
             existAbsence: existAbsence,
+            existAbsenceDay: existAbsenceDay,
             removeAbsence: removeAbsence,
             isDemiJournee: isDemiJournee,
             addNotWorkingDay: addNotWorkingDay,
