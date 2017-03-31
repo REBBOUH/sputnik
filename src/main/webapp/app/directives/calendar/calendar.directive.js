@@ -10,10 +10,9 @@
         vm.sharedValues = shareService.sharedValues;
     };
 
-
     angular
         .module('sputnikApp')
-        .directive("calendar", ['shareService', '$localStorage', function (shareService, $localStorage) {
+        .directive("calendar", ['shareService', function (shareService) {
             var holiday = {
                 "2017": [
                     new moment("01/01/2017", "DD/MM/YYYY"),
@@ -60,6 +59,7 @@
 
                     $scope.select = function (day) {
                         if (event.shiftKey) {
+                            day.selectedDay=true;
                             if (startDAy == null) {
                                 startDAy = day.date
                             } else {
@@ -74,7 +74,11 @@
                                 for (var i = startDAy.date(); i <= endDay.date(); i++) {
                                     var date = new moment("" + day.date.year() + "/" + day.date.format('M') + "/" + i, "YYYY/MM/DD");
                                     if (date.weekday() != 6 && date.weekday() != 0) {
+                                        if (shareService.existAbsenceDay(date)) {
+                                            shareService.removeAbsence(date);
+                                        } else {
                                             shareService.addAbsence(date, false);
+                                        }
                                     }
                                 }
                                 var start = day.date.clone();
@@ -120,8 +124,6 @@
                         $scope.month.month($scope.month.month() + 1);
                         _buildMonth($scope, next, $scope.month);
                         _calWorkingDays($scope.month);
-                        console.log('numOfMonthDays :' + numOfMonthDays + ' numWeekends :  ' + numWeekends + ' numOfWorkingDay : '
-                            + numOfWorkingDay + 'monthName : ' + $scope.month.format("MMMM"));
                     };
 
                     $scope.previous = function () {
@@ -130,8 +132,6 @@
                         $scope.month.month($scope.month.month() - 1);
                         _buildMonth($scope, previous, $scope.month);
                         _calWorkingDays($scope.month);
-                        console.log('numOfMonthDays :' + numOfMonthDays + ' numWeekends :  ' + numWeekends + ' numOfWorkingDay : '
-                            + numOfWorkingDay + 'monthName : ' + $scope.month.format("MMMM"));
                     };
                 }
             };
