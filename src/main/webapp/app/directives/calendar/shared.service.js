@@ -10,20 +10,6 @@
         var selectedMonth = '';
         var workingDays = 0;
         var selectedDate;
-        var notWorkingDays = {
-            "01": [],
-            "02": [],
-            "03": [],
-            "04": [],
-            "05": [],
-            "06": [],
-            "07": [],
-            "08": [],
-            "09": [],
-            "10": [],
-            "11": [],
-            "12": []
-        };
         var absences = {
             "01": [],
             "02": [],
@@ -41,11 +27,6 @@
         syncFromLocalStorage();
 
         function syncFromLocalStorage() {
-            if (angular.isDefined($localStorage.notWorkingDays)) {
-                notWorkingDays = JSON.parse($localStorage.notWorkingDays);
-            } else {
-                $localStorage.notWorkingDays = JSON.stringify(notWorkingDays);
-            }
 
             if (angular.isDefined($localStorage.absences)) {
                 absences = JSON.parse($localStorage.absences);
@@ -68,7 +49,6 @@
 
         function syncToLocalStorage() {
             $localStorage.selectedMonth = JSON.stringify(getSelectedMonth(selectedMonth));
-            $localStorage.notWorkingDays = JSON.stringify(notWorkingDays);
             $localStorage.workingDays = JSON.stringify(workingDays);
             $localStorage.selectedDate = JSON.stringify(selectedDate);
             $localStorage.absences = JSON.stringify(absences);
@@ -150,29 +130,6 @@
             return nbAbsences;
         }
 
-        function existNotWorkingDay(day) {
-            var monthNotWorkingDays = notWorkingDays[day.format("MM")];
-            return monthNotWorkingDays.includes(day.date());
-
-        }
-
-        function addNotWorkingDay(day) {
-            var monthNotWorkingDays = notWorkingDays[day.format("MM")];
-            if (!existNotWorkingDay(day)) {
-                monthNotWorkingDays.push(day.date());
-            }
-            syncToLocalStorage();
-        }
-
-        function removeNotWorkingDay(day) {
-            var monthNotWorkingDays = notWorkingDays[day.format("MM")];
-            var index = monthNotWorkingDays.indexOf(day.date());
-            if (index != -1) {
-                monthNotWorkingDays.splice(index, 1);
-            }
-            syncToLocalStorage();
-        }
-
         function getSelectedMonth() {
             return selectedMonth;
         }
@@ -198,14 +155,11 @@
 
         return {
             getNbAbsences: getNbAbsences,
-            existNotWorkingDay: existNotWorkingDay,
             existAbsence: existAbsence,
             existAbsenceDay: existAbsenceDay,
             removeAbsence: removeAbsence,
             isDemiJournee: isDemiJournee,
-            addNotWorkingDay: addNotWorkingDay,
             addAbsence: addAbsence,
-            removeNotWorkingDay: removeNotWorkingDay,
             syncFromLocalStorage: syncFromLocalStorage,
             syncToLocalStorage: syncToLocalStorage,
             getSelectedMonth: getSelectedMonth,

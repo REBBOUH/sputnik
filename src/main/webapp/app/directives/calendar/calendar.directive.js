@@ -94,18 +94,15 @@
                             if (shareService.isDemiJournee(day.date)) {
                                 day.selectedDay = false;
                                 day.demiJournee = false;
-                                shareService.removeNotWorkingDay(day.date)
                                 shareService.removeAbsence(day.date);
                             } else if (shareService.existAbsence(day.date, false)) {
                                 day.selectedDay = false;
                                 day.demiJournee = true;
                                 shareService.addAbsence(day.date, true);
-                                shareService.addNotWorkingDay(day.date);
                             } else {
                                 day.selectedDay = true;
                                 day.demiJournee = false;
                                 shareService.addAbsence(day.date, false);
-                                shareService.addNotWorkingDay(day.date);
                             }
                         }
 
@@ -113,8 +110,8 @@
                         numOfWorkingDay = numOfMonthDays - (numWeekends + _getNumHoliday() + shareService.getNbAbsences(day.date));
                         shareService.setWorkingDays(numOfWorkingDay);
                         console.log(' Number of WorkingDays ' + numOfWorkingDay);
-                        console.log(shareService.notWorkingDays);
-                        console.log('notWorkingDays' + shareService.getNbAbsences(day.date));
+
+                        console.log('Absences' + shareService.getNbAbsences(day.date));
                     };
 
                     $scope.next = function () {

@@ -5,9 +5,9 @@
         .module('sputnikApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'shareService', '$localStorage', 'notWorkingDays', 'absence', '$log'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'shareService', '$localStorage', 'absence', '$log'];
 
-    function HomeController($scope, Principal, LoginService, $state, shareService, $localStorage, notWorkingDays, absence, $log) {
+    function HomeController($scope, Principal, LoginService, $state, shareService, $localStorage, absence, $log) {
         var vm = this;
         vm.firstName = $localStorage.firstName;
         vm.lastName = $localStorage.lasttName;
@@ -23,7 +23,6 @@
         vm.getWorkingDays = shareService.getWorkingDays;
         vm.getNbAbsences = getNbAbsences;
         vm.isAuthenticated = Principal.isAuthenticated;
-        vm.notWorkingDays = "";
 
         function getNbAbsences() {
             return shareService.getNbAbsences(shareService.getSelectedDate());
@@ -35,23 +34,6 @@
                 pdf.addHTML(document.getElementsByClassName("print"), 1, 30, function () {
                     pdf.save('rapport.pdf');
                 });
-                var notWorkingDays = JSON.parse($localStorage.notWorkingDays);
-                var i;
-                for (i = 1; i <= 12; i++) {
-                    var month = "";
-                    var days = "";
-                    var data = {};
-                    if (i < 10) {
-                        month = "0" + i;
-                    } else {
-                        month = i.toString();
-                    }
-                    days = JSON.stringify(notWorkingDays[month]);
-                    data = {"month": month, "days": days};
-                    createNotWorkingDays({"month": month, "days": days}, function () {
-                        $log.info("success");
-                    });
-                }
             } else {
                 $state.go('register');
             }
@@ -62,18 +44,6 @@
             $localStorage.lasttName = vm.lastName;
             shareService.sharedValues.showDetail = true;
         }
-
-        function createNotWorkingDays(data, callback) {
-            var cb = callback || angular.noop;
-            return notWorkingDays.save(data,
-                function () {
-                    return cb(data);
-                },
-                function (err) {
-                    return cb(err);
-                }).$promise;
-        };
-
 
         function getAbsences(callback) {
             var cb = callback || angular.noop;
@@ -87,10 +57,10 @@
         }
 
         /*getAbsences(function (result) {
-            result.forEach(function (absence) {
-                $log.info(absence);
-            });
-        });*/
+         result.forEach(function (absence) {
+         $log.info(absence);
+         });
+         });*/
 
         $scope.$on('authenticationSuccess', function () {
             getAccount();
