@@ -130,6 +130,10 @@ only screen and (                min-resolution: 2dppx) {
     }
 }
 
+.absence > calendar > div.week > span.day {
+    background: #F5F5F5;
+}
+
 /* ==========================================================================
 Generic styles
 ========================================================================== */
