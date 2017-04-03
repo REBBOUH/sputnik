@@ -16,7 +16,7 @@
             var holiday = {
                 "2017": [
                     new moment("01/01/2017", "DD/MM/YYYY"),
-                    new moment("07/04/2017", "DD/MM/YYYY"),
+                    new moment("17/04/2017", "DD/MM/YYYY"),
                     new moment("01/05/2017", "DD/MM/YYYY"),
                     new moment("08/05/2017", "DD/MM/YYYY"),
                     new moment("25/05/2017", "DD/MM/YYYY"),
@@ -73,7 +73,7 @@
                                 }
                                 for (var i = startDAy.date(); i <= endDay.date(); i++) {
                                     var date = new moment("" + day.date.year() + "/" + day.date.format('M') + "/" + i, "YYYY/MM/DD");
-                                    if (date.weekday() != 6 && date.weekday() != 0) {
+                                    if (date.weekday() != 6 && date.weekday() != 0 &&(currentYearHolidays.map(Number).indexOf(+date) == -1)) {
                                         if (shareService.existAbsenceDay(date)) {
                                             shareService.removeAbsence(date);
                                         } else {
@@ -83,7 +83,6 @@
                                 }
                                 var start = day.date.clone();
                                 _removeTime(start.month(start.month()).date(1));
-                                day.date.month(day.date.month());
                                 _buildMonth($scope, start, day.date);
                                 startDAy = null;
                                 endDay = null;
